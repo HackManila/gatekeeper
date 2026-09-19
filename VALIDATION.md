@@ -1,20 +1,18 @@
-# Validation record / 19 September 2026
+# Validation record
 
-## Executed in preparation
+Checked 19 September 2026 for the Night 1 release.
 
-- `node --test tests/*.test.mjs`: **36 passed, 0 failed**. Includes policy, strict function parsing, admin authorization, same-origin POST enforcement, one-time codes, session isolation, quotas, cost reservations, paused/in-flight behavior, malformed input and persistence.
-- Dependency-free Node server started and served its real HTTP API. Health, admin, session, joining and chat flows exercised.
-- Chromium rendered the participant desktop/mobile and facilitator UI. The real Node handler was used for MOCK open, backend refusal and server-granted legitimate open; mobile at 390px had no horizontal overflow.
-- Raw provider response parsing and request construction tested with fixtures. Mock mode makes no provider calls.
+## Passed locally
 
-## Important environment limitation
+- `npm test`: 36 passed, 0 failed. Covers the permission rule, tool parsing, host authentication, origin checks, enrollment, isolated sessions, quotas, in-flight results, malformed input, and persistence.
+- `npm run smoke`: the real Node HTTP server served all routes. Eight teams joined, independent state was preserved, Round A opened without a pass, Round B denied without a pass and allowed with one, and sessions/counters survived a restart. Temporary mock state was removed after the test.
+- Headless Google Chrome accessed the real local HTTP server using native cookies. Host login, code generation, participant enrollment, mock chat, round changes, and the defended refusal passed. Participant pages were checked at desktop width and 390px. No participant JavaScript errors occurred.
+- The request-construction and response-parsing tests use fixtures. Mock mode makes no external model calls.
 
-Chromium blocks local/file navigation here. For visual/interaction tests, the unchanged HTML/CSS/JS was inlined and fetch was bridged to the actual running Node server through Python HTTP requests with isolated cookie jars. This is not an end-to-end test of native browser cookie handling, delivery headers, TLS, Coolify or the final domain. These remain host checks.
+## Still needed on the deployment
 
-## Not executed
+Docker build and volume permissions, Coolify proxy/TLS, final-domain cookie/origin behavior, live OpenAI access and latency, provider capacity, and the venue network. The local machine has no running Docker daemon. Optional GitHub Actions were deferred because the publishing login lacks workflow scope. The optional Next.js adapter has not been installed or built.
 
-No live OpenAI request, provider capacity test, npm install/Next.js build, Docker build, Coolify deployment, external penetration test or venue-network test. The preparation environment could not reach the package registry. The dependency-free Node runtime is the tested path; Next.js is an optional unbuilt adapter. Run DEPLOY.md before using the hosted activity.
+Follow [DEPLOY.md](DEPLOY.md) for the hosted rehearsal. Health confirms the running process and selected provider; it does not confirm model access. A successful live jailbreak has not been recorded or promised.
 
-## Limits of the result
-
-Passing application tests is not a security certification. The intentionally vulnerable prompt-only rule is confined to an isolated toy gate. Request/output quotas are real checks; dollar accounting is estimated and needs provider-side budget controls. A successful jailbreak is model-dependent and not promised.
+The app is a teaching exercise with an intentionally vulnerable rule in Round A. Local tests do not establish production security or an exact provider bill. The store requires one process and one replica.
