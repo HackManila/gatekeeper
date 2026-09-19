@@ -1,0 +1,25 @@
+services:
+  gatekeeper:
+    build: .
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      APP_ORIGIN: ${APP_ORIGIN:?Set the exact public HTTPS origin}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:?Set a long random token}
+      MODEL_PROVIDER: ${MODEL_PROVIDER:-mock}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5-mini}
+      DATA_DIR: /app/data
+      MAX_MODEL_CALLS: ${MAX_MODEL_CALLS:-400}
+      MAX_TURNS_PER_ROUND: ${MAX_TURNS_PER_ROUND:-12}
+      MAX_CONCURRENT: ${MAX_CONCURRENT:-8}
+      APP_BUDGET_USD: ${APP_BUDGET_USD:-5}
+      MAX_OUTPUT_TOKENS: ${MAX_OUTPUT_TOKENS:-1024}
+      INPUT_USD_PER_MILLION: ${INPUT_USD_PER_MILLION:-0.25}
+      OUTPUT_USD_PER_MILLION: ${OUTPUT_USD_PER_MILLION:-2}
+      OPENAI_REASONING_EFFORT: ${OPENAI_REASONING_EFFORT:-minimal}
+    volumes:
+      - gatekeeper_data:/app/data
+volumes:
+  gatekeeper_data:
